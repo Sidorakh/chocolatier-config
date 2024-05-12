@@ -294,5 +294,42 @@ export const types = [
     {id:'string',name:'String'},
     {id:'string_multiline',name:'Multi-line String'},
     {id:'color',name:'Colour'},
-    {id:'select',name:'Select'}
+    {id:'select',name:'Select'},
 ];
+
+
+export function save(){
+    const config = [];
+    walk_export_tree(config,tree);
+    return config;
+}
+
+function walk_export_tree(config,children) {
+    for (const id of children) {
+        const node = nodes[id];
+        if (node.type != 'section') {
+            const data = {...node};
+            delete data.id;
+            if (data.type == 'color' || data.type == 'colour') {
+                if (typeof(data.value) == 'string') {
+                    const r = data.value.slice(1,3);
+                    const g = data.value.slice(3,5);
+                    const b = data.value.slice(5,7);
+
+                    const bgr = parseInt(b+g+r,16);
+                    data.value = bgr;
+                }
+            }
+            config.push(data);
+        } else {
+            const data = {
+                type: 'section',
+                name: node.name,
+                label: node.label,
+                children: [],
+            }
+            walk_export_tree(data.children,node.children);
+            config.push({...data});
+        }
+    }
+}

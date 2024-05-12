@@ -143,9 +143,14 @@
           }
         }
       },
-      export_config(){},
+      export_config(){
+        const cfg = config.save()
+        const json = JSON.stringify(cfg,null,'\t');
+        return json;
+      },
       copy_to_clipboard(){
         const json = this.export_config();
+        navigator.clipboard.writeText(json)
         this.show_snackbar = true;
         this.snackbar_message = 'Copied to cliboard'
       },
@@ -153,6 +158,13 @@
         const json = this.export_config();
         this.show_snackbar = true;
         this.snackbar_message = 'Download started'
+        const blob = new Blob([json]);
+        const url = URL.createObjectURL(blob);
+        const el = document.createElement('a');
+        el.href = url;
+        el.download = 'config.json';
+        el.click();
+        
       },
     }
   }
