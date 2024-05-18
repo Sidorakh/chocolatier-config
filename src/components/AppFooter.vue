@@ -48,7 +48,7 @@
     {
       title: 'GitHub',
       icon: `mdi-github`,
-      href: 'https://github.com/vuetifyjs/vuetify',
+      href: 'https://github.com/sidorakh/chocolatier-config',
     },
     {
       title: 'Bluesky',
